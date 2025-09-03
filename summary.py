@@ -228,3 +228,26 @@ newlist = [x for x in fruits if "a" in x]
 
 print(newlist, "\n\n")
 
+# For more information about that https://www.w3schools.com/python/python_lists_comprehension.asp
+
+# sorting 
+thislist = ["orange", "mango", "kiwi", "pineapple", "banana"]
+thislist.sort()
+print(thislist) # sort alphabetically 
+
+# Copying a list 
+thislist = ["apple", "banana", "cherry"]
+mylist = thislist.copy()
+print(mylist)
+
+# Joining a list 
+list1 = ["a", "b", "c"]
+list2 = [1, 2, 3]
+
+list3 = list1 + list2
+print(list3) 
+
+# List methods https://www.w3schools.com/python/python_lists_methods.asp
+
+# Just look into the w3Schools everything is in there and if you wanna try stuff do it in the test file 
+# If the code is slow use hashmap
