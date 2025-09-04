@@ -53,17 +53,28 @@ def main():
     
     while True:
         print("\nStudent Grade Manager")
-        print("1. Display All Students")
-        print("2. Calculate Class Average")
-        print("3. Exit")
-        
-        choice = input("Enter your choice (1-3): ")
-        
+        print("1 - Display All Students")
+        print("2 - Calculate Class Average")
+        print("3 - Add Student")
+        print("4 - Exit")
+
+        choice = input("Enter your choice (1-4): ")
+
         if choice == '1':
             manager.display_all_students()
         elif choice == '2':
             manager.calculate_average()
         elif choice == '3':
+            name = input("Enter student name: ")
+            while True:
+                try:
+                    grade = float(input("Enter student grade: "))
+                    break
+                except ValueError:
+                    print("Invalid grade. Please enter a number.")
+            manager.add_student(name, grade)
+            print(f"Added student: {name} with grade: {grade}")
+        elif choice == '4':
             print("Goodbye!")
             break
         else:
