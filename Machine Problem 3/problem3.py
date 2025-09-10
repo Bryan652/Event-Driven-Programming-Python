@@ -26,6 +26,7 @@ For ex: "Dune by Frank Herbert (ISBN: 67890) - Format: EPUB"
 """
 
 
+
 # Challenge 1: The Book Blueprint (Class)
 class Book: 
     def __init__(self, title, author, isbn):
@@ -37,9 +38,6 @@ class Book:
         return f"{self.title} by {self.author} (ISBN: {self.isbn})"
 
 
-b1 = Book("The Hobbit", "J.R.R. Tolkien", "12345")
-print("Chellenge 1 results:",b1)
-
 
 # Challenge 2: The Ebook Specialty (Inheritance)
 class Ebook(Book): 
@@ -50,9 +48,6 @@ class Ebook(Book):
     def __str__(self): 
         return f"{self.title} by {self.author} (ISBN: {self.isbn}) - Format: {self.file_format}"
 
-test = Ebook("Dune", "Frank Herbert", "67890", "EPUB")
-
-print("\n\nChellenge 2 results:", test)
 
 
 # Challenge 3: The Library Collection (Iterator)
@@ -80,16 +75,50 @@ class Library:
             return x 
         else: 
             raise StopIteration
-        
-lib = Library() 
-libIter = iter(lib)
 
-for i in range(5): 
-    if i % 2 == 0: 
-        lib.add_book(f"book {i} - author {i} (ISBN: {i*123})")
+
+
+while True: 
+    choice = input("What problem do you want to try? (1, 2 ,3, or q to quit):")
+
+    if choice == '1': 
+        title = input("Enter book title: ")
+        author = input("Enter book author: ")
+        isbn = input("Enter book ISBN: ")
+        b = Book(title, author, isbn)
+        print(b)
+
+    elif choice == '2':
+        title = input("Enter ebook title: ")
+        author = input("Enter ebook author: ")
+        isbn = input("Enter ebook ISBN: ")
+        file_format = input("Enter ebook file format: ")
+        test = Ebook(title, author, isbn, file_format)
+        print(test)
+
+    elif choice == '3':
+        lib = Library()
+        libIter = iter(lib)
+
+        count = int(input("How many books do you want to add? "))
+        for i in range(count):
+            book_type = input("Is it a physical book or an ebook? (p/e): ").lower()
+            title = input("Enter book title: ")
+            author = input("Enter book author: ")
+            isbn = input("Enter book ISBN: ")
+            if book_type == 'e':
+                file_format = input("Enter ebook file format: ")
+                book = Ebook(title, author, isbn, file_format)
+            else:
+                book = Book(title, author, isbn)
+            lib.add_book(book)
+
+        print("\nBooks in the library:")
+        for book in lib:
+            print(book)
+
+    elif choice == 'q':
+        break
+
     else: 
-        lib.add_book(f"book {i} - author {i} (ISBN: {i*123})")
-
-print("\n\nChallenge 3 results: ")
-for book in libIter: 
-    print(book)
+        print("Invalid choice. Please try again.")
