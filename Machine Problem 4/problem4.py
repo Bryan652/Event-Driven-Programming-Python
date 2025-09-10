@@ -11,15 +11,15 @@ The file_format should be allowed to be NULL for physical books.
 """
 
 import mysql.connector
+import time
+# myDB = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="Y2WADUJjddGc3gC",
+#     database="ev_library"
+# )
 
-myDB = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Y2WADUJjddGc3gC",
-    database="ev_library"
-)
-
-curser = myDB.cursor()
+# curser = myDB.cursor()
 
 # curser.execute("SHOW DATABASES")
 # for x in curser: 
@@ -55,26 +55,45 @@ curser = myDB.cursor()
 #     print(x)
 
 class DatabaseManager():
-    def __init__(self, title, author, isbn, file_format): 
-        self.title = title 
-        self.author = author
-        self.isbn = isbn
-        self.file_format = file_format
+    def __init__(self): 
+        self.myDB = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Y2WADUJjddGc3gC",
+            database="ev_library"
+        )
 
-    def save_books(self): 
+        self.curser = self.myDB.cursor()
+
+
+    def save_books(self, title, author, isbn, file_format): 
         sql = "INSERT INTO books (title, author, isbn, file_format) VALUES (%s, %s, %s, %s)"
-        val = [(self.title, self.author, self.isbn, self.file_format)]
+        val = [(title, author, isbn, file_format)]
 
         valid_val = [v for v in val if all(v[i] for i in range(3))] # Empty string checker 
 
-        curser.executemany(sql, valid_val)
-        myDB.commit()
-        print(curser.rowcount, "Row count affected")
+        self.curser.executemany(sql, valid_val)
+        self.myDB.commit()
+        print(f"{len(valid_val)} Insert count")
+        
+
 
     def load_books(self): 
-        curser.execute("SELECT * FROM books")
-        for x in curser.fetchall(): 
+        print("\n\nLoading Books\n")
+        time.sleep(2)
+        self.curser.execute("SELECT * FROM books")
+        for x in self.curser.fetchall(): 
             print(x)
 
-library = DatabaseManager("", "Author", "1234", "EPUB")
+library = DatabaseManager()
+while True: 
+    print("Enter book details (or 'q' to quit):")
+    title = input("Title: ")
+    if title == 'q':
+        break
+    author = input("Author: ")
+    isbn = input("ISBN: ")
+    file_format = input("File Format (leave blank for physical books): ")
+    library.save_books(title, author, isbn, file_format)
+
 library.load_books()
