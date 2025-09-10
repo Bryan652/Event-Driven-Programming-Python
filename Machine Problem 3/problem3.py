@@ -34,6 +34,22 @@ class Book:
         self.author = author
         self.isbn = isbn
     
+    def inputDetails(self):
+        while True:
+            self.title = input("Enter Book Title: ")
+            if self.title.strip() == "":
+                print("Title cannot be empty. Please try again.")
+                continue
+            self.author = input("Enter Book Author: ")
+            if self.author.strip() == "":
+                print("Author cannot be empty. Please try again.")
+                continue
+            self.isbn = input("Enter Book ISBN: ")
+            if self.isbn.strip() == "":
+                print("ISBN cannot be empty. Please try again.")
+                continue
+            break
+
     def __str__(self): 
         return f"{self.title} by {self.author} (ISBN: {self.isbn})"
 
@@ -44,6 +60,15 @@ class Ebook(Book):
     def __init__(self, title, author, isbn, file_format): 
         super().__init__(title, author, isbn)
         self.file_format = file_format
+
+    def inputDetails(self):
+        super().inputDetails()
+        while True: 
+            self.file_format = input("Enter ebook file format: ")
+            if self.file_format.strip() == "":
+                print("File format cannot be empty. Please try again.")
+                continue
+            break
 
     def __str__(self): 
         return f"{self.title} by {self.author} (ISBN: {self.isbn}) - Format: {self.file_format}"
@@ -58,67 +83,69 @@ class Library:
     def add_book(self, book): 
         self.books.append(book)
 
-    def __iter__(self): 
-        self.a = 0
-        return self 
+    def __iter__(self):
+        return iter(self.books)
 
     def __next__(self):
-        if self.a < len(self.books):
-            # if you only did this it will be index out of range 
-            """
-            because the __next__ method tried to access self.books[self.a] when self.a might be equal or greater than the length of self.books
-            each time you access next(), self,a increases by 1 
-            so when you reach the length of self.books there are no mo items left but still try to access self.books[self.books]
-            """
-            x = self.books[self.a]
-            self.a += 1
-            return x 
-        else: 
+        if not self.books:
             raise StopIteration
+        return self.books.pop(0)
 
+def main(): 
+    while True: 
+        choice = input("What problem do you want to try? (1, 2 ,3, or q to quit):")
 
+        if choice == '1': 
+            b = Book("", "", "")
+            b.inputDetails()
+            print(b)
 
-while True: 
-    choice = input("What problem do you want to try? (1, 2 ,3, or q to quit):")
+        elif choice == '2':
+            test = Ebook("", "", "", "")
+            test.inputDetails()
+            print(test)
 
-    if choice == '1': 
-        title = input("Enter book title: ")
-        author = input("Enter book author: ")
-        isbn = input("Enter book ISBN: ")
-        b = Book(title, author, isbn)
-        print(b)
+        elif choice == '3':
+            lib = Library()
 
-    elif choice == '2':
-        title = input("Enter ebook title: ")
-        author = input("Enter ebook author: ")
-        isbn = input("Enter ebook ISBN: ")
-        file_format = input("Enter ebook file format: ")
-        test = Ebook(title, author, isbn, file_format)
-        print(test)
+            count = int(input("How many books do you want to add? "))
+            for i in range(count):
+                book_type = input("Is it a physical book or an ebook? (p/e): ").lower()
+                while True: 
+                    title = input("Enter book title: ")
+                    if title.strip() == "": 
+                        print("Title cannot be empty. Please try again.")
+                        continue
+                    author = input("Enter book author: ")
+                    if author.strip() == "": 
+                        print("Author cannot be empty. Please try again.")
+                        continue
+                    isbn = input("Enter book ISBN: ")
+                    if isbn.strip() == "": 
+                        print("ISBN cannot be empty. Please try again.")
+                        continue
+                    break
+                if book_type == 'e':
+                    while True: 
+                        file_format = input("Enter ebook file format: ")
+                        if file_format.strip() == "": 
+                            print("File format cannot be empty. Please try again.")
+                            continue
+                        break
+                    book = Ebook(title, author, isbn, file_format)
+                else:
+                    book = Book(title, author, isbn)
+                lib.add_book(book)
 
-    elif choice == '3':
-        lib = Library()
-        libIter = iter(lib)
+            print("\nBooks in the library:")
+            for book in lib:
+                print(book, "\n\n")
 
-        count = int(input("How many books do you want to add? "))
-        for i in range(count):
-            book_type = input("Is it a physical book or an ebook? (p/e): ").lower()
-            title = input("Enter book title: ")
-            author = input("Enter book author: ")
-            isbn = input("Enter book ISBN: ")
-            if book_type == 'e':
-                file_format = input("Enter ebook file format: ")
-                book = Ebook(title, author, isbn, file_format)
-            else:
-                book = Book(title, author, isbn)
-            lib.add_book(book)
+        elif choice == 'q':
+            break
 
-        print("\nBooks in the library:")
-        for book in lib:
-            print(book)
+        else: 
+            print("Invalid choice. Please try again.")
 
-    elif choice == 'q':
-        break
-
-    else: 
-        print("Invalid choice. Please try again.")
+if __name__ == "__main__": 
+    main()
